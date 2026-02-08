@@ -65,6 +65,7 @@ const translations = {
         pmCertTitle: 'Project Management Fundamentals',
         pmCertDesc: 'Planification de projets, gestion d\'équipe et méthodologies agiles pour livraisons réussies',
         linkedinIssuer: 'Émis par LinkedIn Learning',
+        verifyCert: '',
         // Contact Section
         contactTogether: 'Travaillons Ensemble',
         contactSubtitle: 'Je suis toujours ouvert à de nouvelles opportunités et collaborations',
@@ -140,6 +141,8 @@ const translations = {
         pmCertTitle: 'Project Management Fundamentals',
         pmCertDesc: 'Project planning, team management and agile methodologies for successful deliveries',
         linkedinIssuer: 'Issued by LinkedIn Learning',
+        verifyCert: '',
+        // Contact Section
         contactTogether: 'Let\'s Work Together',
         contactSubtitle: 'I\'m always open to new opportunities and collaborations',
         emailLabel: 'Email',
