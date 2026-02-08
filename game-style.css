@@ -216,6 +216,89 @@
     backdrop-filter: blur(20px);
 }
 
+/* Creature shush effect */
+.creature-shush {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 2px solid rgba(255,45,149,0.25);
+    color: var(--neon-pink);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    z-index: 3000;
+    font-weight: 800;
+    pointer-events: none;
+}
+
+/* Large face speech bubble */
+.creature-speech {
+    position: fixed;
+    right: 220px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(0,240,255,0.12);
+    color: var(--text-primary);
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    z-index: 3000;
+    font-weight: 700;
+    pointer-events: none;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45), 0 0 18px rgba(0,240,255,0.06);
+    max-width: 320px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+.creature-speech.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.creature-speech .who { color: var(--neon-cyan); font-weight: 900; margin-right: 6px; }
+.creature-speech .msg { color: var(--text-primary); font-weight: 700; }
+
+/* Onboarding overlay */
+.game-onboard {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    pointer-events: auto;
+}
+.game-onboard .card {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(255, 45, 149, 0.08));
+    border: 2px solid rgba(0, 240, 255, 0.4);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 720px;
+    color: var(--neon-cyan);
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.15);
+}
+.game-onboard h2 { margin-bottom: 0.5rem; }
+.game-onboard p { color: var(--text-muted); margin-bottom: 1.25rem; }
+.game-onboard .got-it {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+    color: var(--bg-dark);
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+}
+
+/* Sound toggle HUD (small indicator on nav) */
+#soundToggle {
+    padding: 0.5rem 0.8rem;
+}
+
+/* Show overlay when active via JS */
+.game-onboard.active { display: flex; }
+
 @keyframes slideDown {
     from {
         opacity: 0;

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#00f0ff"/>
+      <stop offset="1" stop-color="#ff2d95"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#05020a" />
+  <g font-family="Syne, Arial, sans-serif" fill="url(#g)">
+    <text x="60" y="250" font-size="78" font-weight="800">Mouad El Kbabty</text>
+    <text x="60" y="340" font-size="40" fill="#9aa5b8">Ingénieur Informatique — Portfolio</text>
+  </g>
+</svg>
