@@ -1,26 +1,31 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Chat — Mouad El Kbabty</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <nav>
-    <div class="container">
-      <div class="logo">MEK.</div>
-      <div style="margin-left:auto; display:flex; gap:1rem; align-items:center;">
-        <a href="index.html" class="btn btn-secondary">Retour</a>
-      </div>
+<div id="momo-messages">
+    <div class="chat-placeholder">
+        <div class="bot-avatar-large">
+            <span class="avatar-emoji">🤖</span>
+            <div class="status-badge">WIP</div>
+        </div>
+        
+        <h3>Momo Bot <span class="version-tag">v0.5</span></h3>
+        
+        <p class="intro-text">
+            Je suis actuellement en mode <b>Statique</b>. <br>
+            Mon créateur est en train de coder mon cerveau <b>LLM (IA)</b> pour me rendre super intelligent ! 🧠✨
+        </p>
+
+        <div class="brain-loading">
+            <span>Installation de l'IA...</span>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <p class="hint-text">En attendant, utilise des mots-clés simples :</p>
+        <div class="suggestions-grid">
+            <span class="chip" onclick="document.getElementById('momo-text').value='Projets'; document.getElementById('momo-send').click()">💼 Projets</span>
+            <span class="chip" onclick="document.getElementById('momo-text').value='Parcours'; document.getElementById('momo-send').click()">🎓 Parcours</span>
+            <span class="chip" onclick="document.getElementById('momo-text').value='Contact'; document.getElementById('momo-send').click()">📬 Contact</span>
+        </div>
     </div>
-  </nav>
-
-  <main style="padding:6rem 5% 4rem;">
-    <div class="container">
-      <h1 class="section-title">Momo AI</h1>
-      <p class="section-subtitle">Still working on it :))</p>
-
-      
-</body>
-</html>
+</div>
+    <link rel="stylesheet" href="style.css">
+    <script src="chat-init.js" ></script>

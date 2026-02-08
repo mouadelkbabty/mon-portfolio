@@ -65,6 +65,7 @@
             <div class="logo">MEK.</div>
             <ul class="nav-links">
                 <li><a href="#accueil" data-fr="Accueil" data-en="Home">Accueil</a></li>
+                <li><a href="#formation" data-fr="Formation" data-en="Education">Formation</a></li>
                 <li><a href="#projets" data-fr="Projets" data-en="Projects">Projets</a></li>
                 <li><a href="#experience" data-fr="Expérience" data-en="Experience">Expérience</a></li>
                 <li><a href="#game" data-fr="Jeu" data-en="Games">Jeu</a></li>
@@ -75,6 +76,7 @@
                 <button class="lang-toggle" id="langToggle" title="Change language">EN</button>
                  <button id="soundToggle" class="theme-toggle" title="Toggle sound">🔊</button>
                  <button type="button" id="gameToggle" class="btn btn-primary">▶ VIP ACCESS</button>
+                 <button type="button" id="chatButton" class="btn btn-secondary">💬 Momo Chat</button>
             </div>
             <div class="mobile-menu-toggle">
                 <span></span>
@@ -291,7 +293,96 @@
             </div>
         </div>
     </section>
+<section id="formation" data-scroll>
+        <div class="container">
+            <h2 class="section-title">Ma <span class="gradient-text" data-i18n="educationTitle">Formation</span></h2>
+            <p class="section-subtitle" data-i18n="educationDesc">Mon parcours académique universitaire</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-date">
+                                <span class="date-badge" data-i18n="masterDate">Master 2</span>
+                            </div>
+                            <div class="timeline-type" data-i18n="diploma">Diplôme</div>
+                        </div>
+                        <h3 class="timeline-title" data-i18n="masterTitle">Master MIAGE</h3>
+                        <p class="timeline-company" data-i18n="uga">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                            Université Grenoble Alpes
+                        </p>
+                        <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                            Méthodes Informatiques Appliquées à la Gestion des Entreprises.
+                        </p>
+                        <div class="timeline-tech">
+                            <span class="tech-badge" style="border-color: #00E676; color: #00E676;">Mention Bien 🏆</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
 
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-date">
+                                <span class="date-badge" data-i18n="l3Date">Licence 3</span>
+                            </div>
+                            <div class="timeline-type" data-i18n="diploma">Diplôme</div>
+                        </div>
+                        <h3 class="timeline-title" data-i18n="l3Title">Licence 3 MIAGE</h3>
+                        <p class="timeline-company">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                            Université
+                        </p>
+                        <ul class="timeline-tasks">
+                            <li>Spécialisation en Systèmes d'Information</li>
+                            <li>Gestion de projets informatiques et bases de données</li>
+                        </ul>
+                        <div class="timeline-tech">
+                            <span class="tech-badge">Systèmes d'Information</span>
+                            <span class="tech-badge">Gestion</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-date">
+                                <span class="date-badge" data-i18n="l1l2Date">Licence 1 & 2</span>
+                            </div>
+                            <div class="timeline-type" data-i18n="background">Parcours</div>
+                        </div>
+                        <h3 class="timeline-title" data-i18n="mathTitle">Licence Mathématiques</h3>
+                        <p class="timeline-company">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                            Université
+                        </p>
+                        <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                            Formation fondamentale en Mathématiques et Informatique.
+                        </p>
+                        <div class="timeline-tech">
+                            <span class="tech-badge">Algèbre</span>
+                            <span class="tech-badge">Analyse</span>
+                            <span class="tech-badge">Algorithmique</span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="experience" data-scroll>
         <div class="container">
             <h2 class="section-title">Parcours <span class="gradient-text" data-i18n="experienceTitle">Professionnel</span></h2>
@@ -564,5 +655,10 @@
     <script src="charts.js"></script>
     <script src="chat-init.js" defer></script>
     <script src="game-world.js" defer></script>
+    <script>
+document.getElementById('chatButton').addEventListener('click', () => {
+  window.open('chat.html', '_blank');
+});
+</script>
 </body>
 </html>
