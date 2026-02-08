@@ -50,6 +50,13 @@ const translations = {
         gameLibraryLegend: '📚 Bibliothèque = Compétences',
         gamePhoneLegend: '☎️ Téléphone = Contact',
         moreGames: '🎮 Plus de Jeux',
+        // Stats Section
+        statsTitle: 'Statistiques',
+        statsDesc: 'Vue d\'ensemble de mes compétences et expertise',
+        expertiseRanking: 'Domaines d\'Expertise',
+        languageDistribution: 'Répartition des Langages',
+        frameworksUsed: 'Frameworks & Outils',
+        experienceByRole: 'Expérience par Domaine',
         // Contact Section
         contactTogether: 'Travaillons Ensemble',
         contactSubtitle: 'Je suis toujours ouvert à de nouvelles opportunités et collaborations',
@@ -112,6 +119,13 @@ const translations = {
         gameLibraryLegend: '📚 Library = Skills',
         gamePhoneLegend: '☎️ Phone = Contact',
         moreGames: '🎮 More Games',
+        // Stats Section
+        statsTitle: 'Statistics',
+        statsDesc: 'Overview of my skills and expertise',
+        expertiseRanking: 'Areas of Expertise',
+        languageDistribution: 'Programming Languages Distribution',
+        frameworksUsed: 'Frameworks & Tools',
+        experienceByRole: 'Experience by Domain',
         // Contact Section
         contactTogether: 'Let\'s Work Together',
         contactSubtitle: 'I\'m always open to new opportunities and collaborations',

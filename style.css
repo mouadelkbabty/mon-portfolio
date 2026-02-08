@@ -997,6 +997,64 @@ section {
     color: var(--text);
 }
 
+/* Stats Section */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: rgba(21, 26, 51, 0.5);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 24px;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 50%);
+    animation: rotate 20s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 30px 80px rgba(0, 240, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.stat-card:hover::before {
+    opacity: 0.5;
+}
+
+.stat-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card canvas {
+    position: relative;
+    z-index: 1;
+    max-height: 300px;
+}
+
 /* Contact Section */
 .contact-content {
     max-width: 900px;
@@ -1231,5 +1289,18 @@ footer {
 
     .section-title {
         font-size: 2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+    }
+
+    .stat-card h3 {
+        font-size: 1.1rem;
     }
 }

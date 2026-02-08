@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="theme.js" defer></script>
 </head>
 <body>
@@ -353,6 +354,39 @@
         </div>
     </section>
 
+    <section id="stats" data-scroll>
+        <div class="container">
+            <h2 class="section-title">Mes <span class="gradient-text" data-i18n="statsTitle">Statistiques</span></h2>
+            <p class="section-subtitle" data-i18n="statsDesc">Vue d'ensemble de mes compétences et expertise</p>
+            
+            <div class="stats-grid">
+                <!-- Graphique Radar: Domaines d'expertise -->
+                <div class="stat-card">
+                    <h3 data-i18n="expertiseRanking">Domaines d'Expertise</h3>
+                    <canvas id="radarChart"></canvas>
+                </div>
+                
+                <!-- Graphique Donut: Langages -->
+                <div class="stat-card">
+                    <h3 data-i18n="languageDistribution">Répartition des Langages</h3>
+                    <canvas id="donutChart"></canvas>
+                </div>
+                
+                <!-- Graphique Bar: Frameworks -->
+                <div class="stat-card">
+                    <h3 data-i18n="frameworksUsed">Frameworks & Outils</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                
+                <!-- Graphique Horizontal: Années d'expérience -->
+                <div class="stat-card">
+                    <h3 data-i18n="experienceByRole">Expérience par Domaine</h3>
+                    <canvas id="horizontalChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="game" data-scroll>
         <div class="container">
             <h2 class="section-title">Portfolio <span class="gradient-text" data-i18n="gamePortfolio">Interactif</span></h2>
@@ -424,5 +458,7 @@
     <script src="project.js"></script>
     <script src="script.js"></script>
     <script src="game.js"></script>
+    <script src="effects.js"></script>
+    <script src="charts.js"></script>
 </body>
 </html>
