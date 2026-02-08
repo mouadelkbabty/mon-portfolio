@@ -57,6 +57,15 @@ const translations = {
         languageDistribution: 'Répartition des Langages',
         frameworksUsed: 'Frameworks & Outils',
         experienceByRole: 'Expérience par Domaine',
+        // Certificates Section
+        certificatesTitle: 'Certificats',
+        certificatesDesc: 'Certifications professionnelles et validations de compétences',
+        gitCertTitle: 'Git & GitHub Essentials',
+        gitCertDesc: 'Maîtrise des concepts Git, workflows et collaboration GitHub pour les projets d\'équipe',
+        pmCertTitle: 'Project Management Fundamentals',
+        pmCertDesc: 'Planification de projets, gestion d\'équipe et méthodologies agiles pour livraisons réussies',
+        linkedinIssuer: 'Émis par LinkedIn Learning',
+        verifyCert: 'Vérifier →',
         // Contact Section
         contactTogether: 'Travaillons Ensemble',
         contactSubtitle: 'Je suis toujours ouvert à de nouvelles opportunités et collaborations',
@@ -89,7 +98,6 @@ const translations = {
         programmingLangs: 'Programming Languages',
         frameworks: 'Frameworks & Web Services',
         databases: 'Data & Tools',
-        // Projects Section
         projectsTitle: 'Projects',
         projectsDesc: 'Discover my work across various domains',
         allProjects: 'All projects',
@@ -97,7 +105,6 @@ const translations = {
         dataScience: 'Data Science (more projects on my GitHub)',
         machineLearning: 'Machine Learning',
         noProjects: 'No projects found in this category',
-        // Experience Section
         experienceTitle: 'Experience',
         experienceDesc: 'My professional journey',
         presentDate: '2025 - Present',
@@ -126,6 +133,15 @@ const translations = {
         languageDistribution: 'Programming Languages Distribution',
         frameworksUsed: 'Frameworks & Tools',
         experienceByRole: 'Experience by Domain',
+        // Certificates Section
+        certificatesTitle: 'Certificates',
+        certificatesDesc: 'Professional certifications and skills validation',
+        gitCertTitle: 'Git & GitHub Essentials',
+        gitCertDesc: 'Mastery of Git concepts, workflows and GitHub collaboration for team projects',
+        pmCertTitle: 'Project Management Fundamentals',
+        pmCertDesc: 'Project planning, team management and agile methodologies for successful deliveries',
+        linkedinIssuer: 'Issued by LinkedIn Learning',
+        verifyCert: 'Verify →',
         // Contact Section
         contactTogether: 'Let\'s Work Together',
         contactSubtitle: 'I\'m always open to new opportunities and collaborations',

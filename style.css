@@ -997,6 +997,125 @@ section {
     color: var(--text);
 }
 
+/* Certificates Section */
+.certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.certificate-card {
+    background: rgba(21, 26, 51, 0.5);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.certificate-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 50%);
+    animation: rotate 20s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.certificate-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 30px 80px rgba(0, 240, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.certificate-card:hover::before {
+    opacity: 0.5;
+}
+
+.certificate-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.certificate-logo {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.certificate-logo svg {
+    color: inherit;
+}
+
+.certificate-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin: 0 0 0.3rem 0;
+}
+
+.certificate-info p {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin: 0;
+}
+
+.certificate-body {
+    position: relative;
+    z-index: 1;
+}
+
+.certificate-body p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.certificate-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.certificate-date {
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.certificate-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.certificate-link:hover {
+    color: var(--accent-warm);
+    transform: translateX(5px);
+}
+
 /* Stats Section */
 .stats-grid {
     display: grid;
