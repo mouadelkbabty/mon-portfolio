@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer Game</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #0A0E27;
+            color: #E8EDF2;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10, 14, 39, 0.95);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 50;
+        }
+
+        .title { font-size: 1.5rem; font-weight: bold; color: #00F0FF; }
+
+        .hud { display: flex; gap: 2rem; }
+        .hud-item { font-weight: 600; }
+
+        .back-link { 
+            color: #E8EDF2; 
+            text-decoration: none; 
+            background: rgba(0,240,255,0.1); 
+            padding: 0.5rem 1rem; 
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #gameCanvas {
+            display: block;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background: linear-gradient(180deg, #1a2a4a 0%, #0f1a2e 100%);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal.hidden { display: none; }
+
+        .modal-content {
+            background: linear-gradient(135deg, #151A33 0%, #1a1f3a 100%);
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .modal h2 { 
+            font-size: 2.5rem; 
+            color: #00F0FF; 
+            margin-bottom: 1rem; 
+        }
+
+        .modal p { 
+            color: #8892A6; 
+            margin: 1rem 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #00F0FF, #00C8D7);
+            color: #0A0E27;
+        }
+
+        .btn-play:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.5);
+        }
+
+        .btn-back {
+            background: transparent;
+            color: #E8EDF2;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .controls-info {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .controls-info p {
+            margin: 0.5rem 0;
+            color: #E8EDF2;
+        }
+
+        .controls-info strong { color: #00F0FF; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="title">🏃 Platformer Game</div>
+        <div class="hud">
+            <div class="hud-item">Niveau: <span id="level">1</span></div>
+            <div class="hud-item">Score: <span id="score">0</span></div>
+            <div class="hud-item">Vies: <span id="lives">❤️❤️❤️</span></div>
+        </div>
+        <a href="../games.html" class="back-link">← Retour</a>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Start Modal -->
+    <div class="modal" id="startModal">
+        <div class="modal-content">
+            <h2>Platformer Game 🏃</h2>
+            <p>Collecte les pièces et franchis les obstacles!</p>
+            <div class="controls-info">
+                <p><strong>← →</strong> ou <strong>A D</strong> = Déplacer</p>
+                <p><strong>ESPACE</strong> = Sauter (double saut possible)</p>
+                <p><strong>P</strong> = Pause</p>
+                <p><strong>💰</strong> = Collecte pour +100 points</p>
+                <p><strong>👾</strong> = Évite les ennemis!</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="startGame()">Commencer</button>
+                <button class="btn-back" onclick="goBack()">Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div class="modal hidden" id="levelModal">
+        <div class="modal-content">
+            <h2>Niveau Complété! 🎉</h2>
+            <p id="levelMsg">Excellent!</p>
+            <p>Score: <span id="levelScore">0</span></p>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="nextLevel()">Suivant</button>
+                <button class="btn-back" onclick="goBack()">Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal hidden" id="gameOverModal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Game Over!</h2>
+            <p id="gameOverMsg">Perdu!</p>
+            <p>Score Final: <span id="finalScore">0</span></p>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="location.reload()">Rejouer</button>
+                <button class="btn-back" onclick="goBack()">Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize canvas
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 60;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game state
+        let gameRunning = false;
+        let gamePaused = false;
+        let level = 1;
+        let score = 0;
+        let lives = 3;
+
+        // Player
+        const player = {
+            x: 50, y: 0, w: 30, h: 40,
+            vx: 0, vy: 0, speed: 6, jump: 15, gravity: 0.6,
+            jumping: false, djump: false
+        };
+
+        // Game objects
+        let platforms = [];
+        let enemies = [];
+        let coins = [];
+        let particles = [];
+
+        // Input
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key === ' ') {
+                e.preventDefault();
+                if (gameRunning && !gamePaused) {
+                    if (!player.jumping) {
+                        player.vy = -player.jump;
+                        player.jumping = true;
+                    } else if (!player.djump) {
+                        player.vy = -player.jump;
+                        player.djump = true;
+                    }
+                }
+            }
+            if (e.key.toLowerCase() === 'p' && gameRunning) gamePaused = !gamePaused;
+        });
+        window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+        // Setup levels
+        function initLevel() {
+            platforms = [];
+            enemies = [];
+            coins = [];
+            player.x = 50;
+            player.y = canvas.height - 150;
+            player.vx = 0;
+            player.vy = 0;
+            player.jumping = false;
+            player.djump = false;
+
+            if (level === 1) {
+                platforms.push({x: 0, y: canvas.height - 40, w: canvas.width, h: 40, color: '#FF6B35'});
+                platforms.push({x: 200, y: canvas.height - 180, w: 150, h: 20, color: '#00F0FF'});
+                platforms.push({x: 450, y: canvas.height - 140, w: 150, h: 20, color: '#00F0FF'});
+                platforms.push({x: 700, y: canvas.height - 220, w: 150, h: 20, color: '#00F0FF'});
+                platforms.push({x: 950, y: canvas.height - 100, w: 150, h: 20, color: '#00F0FF'});
+                platforms.push({x: canvas.width - 200, y: canvas.height - 150, w: 150, h: 20, color: '#A855F7', exit: true});
+                
+                enemies.push({x: 250, y: canvas.height - 220, w: 30, h: 30, speed: 2, minX: 200, maxX: 350, dir: 1});
+                enemies.push({x: 750, y: canvas.height - 260, w: 30, h: 30, speed: 2.5, minX: 700, maxX: 850, dir: 1});
+                
+                coins.push({x: 210, y: canvas.height - 220, collected: false});
+                coins.push({x: 460, y: canvas.height - 180, collected: false});
+                coins.push({x: 710, y: canvas.height - 260, collected: false});
+                coins.push({x: 960, y: canvas.height - 140, collected: false});
+            } else if (level === 2) {
+                platforms.push({x: 0, y: canvas.height - 40, w: canvas.width, h: 40, color: '#FF6B35'});
+                platforms.push({x: 100, y: canvas.height - 150, w: 120, h: 20, color: '#00F0FF'});
+                platforms.push({x: 300, y: canvas.height - 200, w: 100, h: 20, color: '#00F0FF'});
+                platforms.push({x: 500, y: canvas.height - 120, w: 100, h: 20, color: '#00F0FF'});
+                platforms.push({x: 700, y: canvas.height - 250, w: 120, h: 20, color: '#00F0FF'});
+                platforms.push({x: 900, y: canvas.height - 160, w: 100, h: 20, color: '#00F0FF'});
+                platforms.push({x: canvas.width - 200, y: canvas.height - 150, w: 150, h: 20, color: '#A855F7', exit: true});
+                
+                enemies.push({x: 200, y: canvas.height - 190, w: 30, h: 30, speed: 3, minX: 100, maxX: 400, dir: 1});
+                enemies.push({x: 600, y: canvas.height - 160, w: 30, h: 30, speed: 3.5, minX: 500, maxX: 800, dir: 1});
+                enemies.push({x: 1000, y: canvas.height - 200, w: 30, h: 30, speed: 3, minX: 900, maxX: 1100, dir: 1});
+                
+                coins.push({x: 110, y: canvas.height - 190, collected: false});
+                coins.push({x: 310, y: canvas.height - 240, collected: false});
+                coins.push({x: 510, y: canvas.height - 160, collected: false});
+                coins.push({x: 710, y: canvas.height - 290, collected: false});
+                coins.push({x: 910, y: canvas.height - 200, collected: false});
+            } else if (level === 3) {
+                platforms.push({x: 0, y: canvas.height - 40, w: canvas.width, h: 40, color: '#FF6B35'});
+                for (let i = 0; i < 8; i++) {
+                    platforms.push({x: 50 + i * 150, y: canvas.height - 100 - (i % 3) * 100, w: 80, h: 20, color: '#00F0FF'});
+                }
+                platforms.push({x: canvas.width - 150, y: canvas.height - 150, w: 120, h: 20, color: '#A855F7', exit: true});
+                
+                for (let i = 0; i < 4; i++) {
+                    enemies.push({x: 200 + i * 300, y: canvas.height - 150, w: 30, h: 30, speed: 4, minX: 150 + i * 300, maxX: 350 + i * 300, dir: 1});
+                }
+                
+                for (let i = 0; i < 7; i++) {
+                    coins.push({x: 100 + i * 150, y: canvas.height - 160, collected: false});
+                }
+            } else {
+                endGame(true);
+                return;
+            }
+        }
+
+        // Update game
+        function update() {
+            if (!gameRunning || gamePaused) return;
+
+            if (keys['arrowleft'] || keys['a']) player.vx = -player.speed;
+            else if (keys['arrowright'] || keys['d']) player.vx = player.speed;
+            else player.vx = 0;
+
+            player.vy += player.gravity;
+            player.x += player.vx;
+            player.y += player.vy;
+
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.w > canvas.width) player.x = canvas.width - player.w;
+
+            if (player.y > canvas.height) {
+                lives--;
+                document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+                if (lives <= 0) endGame(false);
+                else initLevel();
+                return;
+            }
+
+            // Platforms
+            platforms.forEach(p => {
+                if (player.vy > 0 && player.y + player.h >= p.y && player.y + player.h <= p.y + 20 &&
+                    player.x + player.w > p.x && player.x < p.x + p.w) {
+                    player.vy = 0;
+                    player.y = p.y - player.h;
+                    player.jumping = false;
+                    player.djump = false;
+                    if (p.exit) levelComplete();
+                }
+            });
+
+            // Enemies
+            enemies.forEach(e => {
+                e.x += e.speed * e.dir;
+                if (e.x <= e.minX || e.x >= e.maxX) e.dir *= -1;
+                
+                if (player.x < e.x + e.w && player.x + player.w > e.x &&
+                    player.y < e.y + e.h && player.y + player.h > e.y) {
+                    lives--;
+                    document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+                    if (lives <= 0) endGame(false);
+                    else initLevel();
+                }
+            });
+
+            // Coins
+            coins.forEach(c => {
+                if (!c.collected && player.x < c.x + 15 && player.x + player.w > c.x - 15 &&
+                    player.y < c.y + 15 && player.y + player.h > c.y - 15) {
+                    c.collected = true;
+                    score += 100;
+                    document.getElementById('score').textContent = score;
+                    for (let i = 0; i < 8; i++) {
+                        particles.push({x: c.x, y: c.y, vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6, life: 1});
+                    }
+                }
+            });
+
+            particles = particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.3;
+                p.life -= 0.02;
+                return p.life > 0;
+            });
+        }
+
+        // Draw game
+        function draw() {
+            ctx.fillStyle = 'rgba(26, 42, 74, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            platforms.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+            });
+
+            enemies.forEach(e => {
+                ctx.fillStyle = '#FF2E63';
+                ctx.beginPath();
+                ctx.arc(e.x + e.w / 2, e.y + e.h / 2, e.w / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(e.x + 8, e.y + 8, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(e.x + 22, e.y + 8, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            coins.forEach(c => {
+                if (!c.collected) {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.beginPath();
+                    ctx.arc(c.x, c.y, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#FFA500';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+
+            particles.forEach(p => {
+                ctx.fillStyle = '#FFD700';
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            ctx.fillStyle = '#00F0FF';
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(player.x + 8, player.y + 10, 5, 5);
+            ctx.fillRect(player.x + 17, player.y + 10, 5, 5);
+
+            if (gamePaused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00F0FF';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Functions
+        function startGame() {
+            document.getElementById('startModal').classList.add('hidden');
+            gameRunning = true;
+            gamePaused = false;
+            level = 1;
+            score = 0;
+            lives = 3;
+            document.getElementById('level').textContent = level;
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = '❤️❤️❤️';
+            initLevel();
+        }
+
+        function levelComplete() {
+            gameRunning = false;
+            document.getElementById('levelMsg').textContent = 'Niveau ' + level + ' terminé!';
+            document.getElementById('levelScore').textContent = score;
+            document.getElementById('levelModal').classList.remove('hidden');
+        }
+
+        function nextLevel() {
+            level++;
+            document.getElementById('level').textContent = level;
+            document.getElementById('levelModal').classList.add('hidden');
+            gameRunning = true;
+            initLevel();
+        }
+
+        function endGame(won) {
+            gameRunning = false;
+            const modal = document.getElementById('gameOverModal');
+            const title = document.getElementById('gameOverTitle');
+            const msg = document.getElementById('gameOverMsg');
+            
+            if (won) {
+                title.textContent = '🏆 CERTIFICAT DE MAÎTRISE! 🏆';
+                const today = new Date().toLocaleDateString('fr-FR');
+                msg.innerHTML = `<strong style="color: #FFD700; font-size: 1.2rem;">DÉFI PLATFORMER COMPLÉTÉ!</strong><br><br>
+                    Félicitations! Tu as maîtrisé tous les obstacles<br>
+                    et démontré tes compétences en résolution de problèmes.<br><br>
+                    <span style="font-size: 0.9rem; color: #8892A6;">
+                    Certificat émis le: ${today}<br>
+                    Score Final: ${score} points<br>
+                    Niveaux Complétés: 3/3 ✓
+                    </span><br><br>
+                    <span style="font-size: 0.85rem; color: #00F0FF; font-weight: bold;">
+                    ~ Signé: Mouad El Kabtty ~
+                    </span>`;
+            } else {
+                title.textContent = 'Game Over!';
+                msg.textContent = 'Perdu! Réessaye.';
+            }
+            
+            document.getElementById('finalScore').textContent = score;
+            modal.classList.remove('hidden');
+        }
+
+        function goBack() {
+            window.location.href = '../games.html';
+        }
+
+        // Start
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer - Side Scroller</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif;
+            background: #0A0E27;
+            color: #E8EDF2;
+            overflow: hidden;
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10, 14, 39, 0.95);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 100;
+        }
+        .title { font-size: 1.5rem; font-weight: bold; color: #00F0FF; }
+        .hud { display: flex; gap: 2rem; flex: 1; margin-left: 3rem; }
+        .hud-item { font-weight: 600; }
+        .back-link { color: #E8EDF2; text-decoration: none; background: rgba(0,240,255,0.1); padding: 0.5rem 1rem; border-radius: 8px; }
+        .back-link:hover { color: #00F0FF; background: rgba(0,240,255,0.2); }
+        
+        canvas { 
+            display: block;
+            position: absolute;
+            top: 60px;
+            left: 0;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: linear-gradient(135deg, #151A33 0%, #1a1f3a 100%);
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+        }
+        .modal h2 { font-size: 2rem; color: #00F0FF; margin-bottom: 1rem; }
+        .modal p { color: #8892A6; margin-bottom: 1rem; font-size: 1rem; }
+        .modal-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; }
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-play { background: linear-gradient(135deg, #00F0FF, #00C8D7); color: #0A0E27; }
+        .btn-play:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.5); }
+        .btn-back { background: transparent; color: #E8EDF2; border: 2px solid rgba(0, 240, 255, 0.3); }
+        .btn-back:hover { background: rgba(0, 240, 255, 0.1); border-color: #00F0FF; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="title">🏃 Platformer Game</div>
+        <div class="hud">
+            <div class="hud-item">Level: <span id="level">1</span></div>
+            <div class="hud-item">Score: <span id="score">0</span></div>
+            <div class="hud-item">Lives: <span id="lives">❤️❤️❤️</span></div>
+            <div class="hud-item">Items: <span id="items">0</span></div>
+        </div>
+        <a href="../games.html" class="back-link">← Back</a>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Start Modal -->
+    <div class="modal active" id="startModal">
+        <div class="modal-content">
+            <h2>Platformer Game 🏃</h2>
+            <p>Collect technology skills and avoid enemies!</p>
+            <div style="background: rgba(0,240,255,0.1); padding: 1.5rem; border-radius: 12px; margin: 2rem 0; text-align: left;">
+                <p><strong>← →</strong> Move</p>
+                <p><strong>SPACE</strong> Jump (double jump!)</p>
+                <p><strong>P</strong> Pause</p>
+                <p><strong>🪙</strong> Collect coins = +100 points</p>
+                <p><strong>👾</strong> Avoid enemies</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="startGame()">Start Game</button>
+                <button class="btn-back" onclick="window.location.href='../games.html'">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div class="modal" id="levelCompleteModal">
+        <div class="modal-content">
+            <h2>Level Complete! 🎉</h2>
+            <p id="levelMsg">Great job!</p>
+            <p>Score: <span id="levelScore">0</span></p>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="nextLevel()">Next Level</button>
+                <button class="btn-back" onclick="window.location.href='../games.html'">Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Game Over!</h2>
+            <p id="gameOverMsg">You lost all your lives!</p>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <div class="modal-buttons">
+                <button class="btn-play" onclick="location.reload()">Play Again</button>
+                <button class="btn-back" onclick="window.location.href='../games.html'">Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for DOM
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight - 60;
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 60;
+        });
+
+        // Game state
+        let gameRunning = false;
+        let gamePaused = false;
+        let level = 1;
+        let score = 0;
+        let lives = 3;
+        let itemsCollected = 0;
+
+        // Player
+        const player = {
+            x: 100,
+            y: canvas.height - 200,
+            width: 30,
+            height: 40,
+            velocityY: 0,
+            velocityX: 0,
+            speed: 6,
+            jumpPower: 15,
+            gravity: 0.7,
+            isJumping: false,
+            canDoubleJump: false
+        };
+
+        // Game objects
+        let platforms = [];
+        let enemies = [];
+        let coins = [];
+        let particles = [];
+
+        // Input
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            if (e.key === ' ' && gameRunning && !gamePaused) {
+                e.preventDefault();
+                if (!player.isJumping) {
+                    player.velocityY = -player.jumpPower;
+                    player.isJumping = true;
+                } else if (player.canDoubleJump) {
+                    player.velocityY = -player.jumpPower;
+                    player.canDoubleJump = false;
+                }
+            }
+            
+            if (e.key.toLowerCase() === 'p' && gameRunning) {
+                gamePaused = !gamePaused;
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Level setup
+        function setupLevel() {
+            platforms = [];
+            enemies = [];
+            coins = [];
+            
+            if (level === 1) {
+                // Ground
+                platforms.push({ x: 0, y: canvas.height - 50, w: canvas.width, h: 50, color: '#FF6B35' });
+                // Moving platforms
+                platforms.push({ x: 200, y: canvas.height - 200, w: 150, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 500, y: canvas.height - 150, w: 150, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 800, y: canvas.height - 250, w: 150, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 1100, y: canvas.height - 120, w: 150, h: 20, color: '#00F0FF' });
+                platforms.push({ x: canvas.width - 250, y: canvas.height - 200, w: 200, h: 20, color: '#A855F7', isExit: true });
+                
+                enemies.push({ x: 250, y: canvas.height - 240, w: 30, h: 30, speed: 2, minX: 150, maxX: 350, color: '#FF2E63' });
+                enemies.push({ x: 850, y: canvas.height - 290, w: 30, h: 30, speed: 2.5, minX: 750, maxX: 950, color: '#FF2E63' });
+                
+                coins.push({ x: 220, y: canvas.height - 240, collected: false });
+                coins.push({ x: 520, y: canvas.height - 190, collected: false });
+                coins.push({ x: 820, y: canvas.height - 290, collected: false });
+                coins.push({ x: 1120, y: canvas.height - 160, collected: false });
+            } else if (level === 2) {
+                platforms.push({ x: 0, y: canvas.height - 50, w: canvas.width, h: 50, color: '#FF6B35' });
+                platforms.push({ x: 150, y: canvas.height - 150, w: 100, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 350, y: canvas.height - 220, w: 100, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 550, y: canvas.height - 130, w: 100, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 750, y: canvas.height - 260, w: 100, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 950, y: canvas.height - 150, w: 100, h: 20, color: '#00F0FF' });
+                platforms.push({ x: canvas.width - 250, y: canvas.height - 200, w: 200, h: 20, color: '#A855F7', isExit: true });
+                
+                enemies.push({ x: 200, y: canvas.height - 190, w: 30, h: 30, speed: 3, minX: 100, maxX: 400, color: '#FF2E63' });
+                enemies.push({ x: 600, y: canvas.height - 170, w: 30, h: 30, speed: 3.5, minX: 500, maxX: 800, color: '#FF2E63' });
+                enemies.push({ x: 1000, y: canvas.height - 190, w: 30, h: 30, speed: 3, minX: 900, maxX: 1100, color: '#FF2E63' });
+                
+                coins.push({ x: 160, y: canvas.height - 190, collected: false });
+                coins.push({ x: 360, y: canvas.height - 260, collected: false });
+                coins.push({ x: 560, y: canvas.height - 170, collected: false });
+                coins.push({ x: 760, y: canvas.height - 300, collected: false });
+                coins.push({ x: 960, y: canvas.height - 190, collected: false });
+            } else if (level === 3) {
+                platforms.push({ x: 0, y: canvas.height - 50, w: canvas.width, h: 50, color: '#FF6B35' });
+                platforms.push({ x: 100, y: canvas.height - 120, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 250, y: canvas.height - 200, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 400, y: canvas.height - 140, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 550, y: canvas.height - 260, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 700, y: canvas.height - 160, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 850, y: canvas.height - 220, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: 1000, y: canvas.height - 100, w: 80, h: 20, color: '#00F0FF' });
+                platforms.push({ x: canvas.width - 250, y: canvas.height - 200, w: 200, h: 20, color: '#A855F7', isExit: true });
+                
+                for (let i = 0; i < 4; i++) {
+                    enemies.push({ x: 200 + i * 300, y: canvas.height - 200, w: 30, h: 30, speed: 4 + i * 0.5, minX: 100 + i * 300, maxX: 350 + i * 300, color: '#FF2E63' });
+                }
+                
+                coins.push({ x: 110, y: canvas.height - 160, collected: false });
+                coins.push({ x: 260, y: canvas.height - 240, collected: false });
+                coins.push({ x: 410, y: canvas.height - 180, collected: false });
+                coins.push({ x: 560, y: canvas.height - 300, collected: false });
+                coins.push({ x: 710, y: canvas.height - 200, collected: false });
+                coins.push({ x: 860, y: canvas.height - 260, collected: false });
+                coins.push({ x: 1010, y: canvas.height - 140, collected: false });
+            } else {
+                endGame(true);
+            }
+            
+            player.x = 50;
+            player.y = canvas.height - 150;
+            player.velocityX = 0;
+            player.velocityY = 0;
+            player.isJumping = false;
+            player.canDoubleJump = true;
+        }
+
+        // Update
+        function update() {
+            if (!gameRunning || gamePaused) return;
+
+            // Movement
+            if (keys['arrowleft'] || keys['a']) player.velocityX = -player.speed;
+            else if (keys['arrowright'] || keys['d']) player.velocityX = player.speed;
+            else player.velocityX = 0;
+
+            // Gravity
+            player.velocityY += player.gravity;
+            player.x += player.velocityX;
+            player.y += player.velocityY;
+
+            // Bounds
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+
+            // Fall
+            if (player.y > canvas.height) {
+                lives--;
+                document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+                if (lives <= 0) endGame(false);
+                else setupLevel();
+                return;
+            }
+
+            // Platform collisions
+            platforms.forEach(p => {
+                if (player.velocityY > 0 &&
+                    player.y + player.height >= p.y &&
+                    player.y + player.height <= p.y + 25 &&
+                    player.x + player.width > p.x &&
+                    player.x < p.x + p.w) {
+                    player.velocityY = 0;
+                    player.y = p.y - player.height;
+                    player.isJumping = false;
+                    player.canDoubleJump = true;
+                    
+                    if (p.isExit) levelComplete();
+                }
+            });
+
+            // Enemy collisions
+            enemies.forEach(e => {
+                e.x += e.speed * (e.dir || 1);
+                if (e.x <= e.minX || e.x >= e.maxX) e.dir = (e.dir || 1) * -1;
+                
+                if (player.x < e.x + e.w &&
+                    player.x + player.width > e.x &&
+                    player.y < e.y + e.h &&
+                    player.y + player.height > e.y) {
+                    lives--;
+                    document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, lives));
+                    if (lives <= 0) endGame(false);
+                    else setupLevel();
+                }
+            });
+
+            // Coin collisions
+            coins.forEach(c => {
+                if (!c.collected && 
+                    player.x < c.x + 15 &&
+                    player.x + player.width > c.x - 15 &&
+                    player.y < c.y + 15 &&
+                    player.y + player.height > c.y - 15) {
+                    c.collected = true;
+                    score += 100;
+                    itemsCollected++;
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('items').textContent = itemsCollected;
+                    
+                    for (let i = 0; i < 8; i++) {
+                        particles.push({
+                            x: c.x, y: c.y,
+                            vx: (Math.random() - 0.5) * 6,
+                            vy: (Math.random() - 0.5) * 6,
+                            life: 1
+                        });
+                    }
+                }
+            });
+
+            // Update particles
+            particles = particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.3;
+                p.life -= 0.02;
+                return p.life > 0;
+            });
+        }
+
+        // Draw
+        function draw() {
+            // BG
+            ctx.fillStyle = 'rgba(26, 42, 74, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Platforms
+            platforms.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+                if (p.isExit) {
+                    ctx.fillStyle = 'rgba(168, 85, 247, 0.3)';
+                    ctx.fillRect(p.x, p.y - 15, p.w, 15);
+                }
+            });
+
+            // Enemies
+            enemies.forEach(e => {
+                ctx.fillStyle = e.color;
+                ctx.beginPath();
+                ctx.arc(e.x + e.w / 2, e.y + e.h / 2, e.w / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(e.x + 8, e.y + 8, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(e.x + 22, e.y + 8, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Coins
+            coins.forEach(c => {
+                if (!c.collected) {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.beginPath();
+                    ctx.arc(c.x, c.y, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#FFA500';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+
+            // Particles
+            particles.forEach(p => {
+                ctx.fillStyle = '#FFD700';
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            // Player
+            ctx.fillStyle = '#00F0FF';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(player.x + 8, player.y + 10, 5, 5);
+            ctx.fillRect(player.x + 17, player.y + 10, 5, 5);
+
+            // Pause
+            if (gamePaused) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00F0FF';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Functions
+        window.startGame = function() {
+            document.getElementById('startModal').classList.remove('active');
+            gameRunning = true;
+            gamePaused = false;
+            level = 1;
+            score = 0;
+            lives = 3;
+            itemsCollected = 0;
+            document.getElementById('level').textContent = level;
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = '❤️❤️❤️';
+            document.getElementById('items').textContent = 0;
+            setupLevel();
+        };
+
+        window.levelComplete = function() {
+            gameRunning = false;
+            document.getElementById('levelMsg').textContent = `Level ${level} completed!`;
+            document.getElementById('levelScore').textContent = score;
+            document.getElementById('levelCompleteModal').classList.add('active');
+        };
+
+        window.nextLevel = function() {
+            level++;
+            document.getElementById('level').textContent = level;
+            document.getElementById('levelCompleteModal').classList.remove('active');
+            gameRunning = true;
+            setupLevel();
+        };
+
+        window.endGame = function(won) {
+            gameRunning = false;
+            const modal = document.getElementById('gameOverModal');
+            if (won) {
+                document.getElementById('gameOverTitle').textContent = 'Victory! 🎉';
+                document.getElementById('gameOverMsg').textContent = 'You beat all 3 levels!';
+            } else {
+                document.getElementById('gameOverTitle').textContent = 'Game Over!';
+                document.getElementById('gameOverMsg').textContent = 'You lost all your lives!';
+            }
+            document.getElementById('finalScore').textContent = score;
+            modal.classList.add('active');
+        };
+
+        // Start loop
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="theme.js" defer></script>
 </head>
 <body>
     <div class="bg-gradient"></div>
@@ -17,12 +18,16 @@
         <div class="container">
             <div class="logo">MEK.</div>
             <ul class="nav-links">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#projets">Projets</a></li>
-                <li><a href="#experience">Expérience</a></li>
-                <li><a href="#game">Jeu</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#accueil" data-fr="Accueil" data-en="Home">Accueil</a></li>
+                <li><a href="#projets" data-fr="Projets" data-en="Projects">Projets</a></li>
+                <li><a href="#experience" data-fr="Expérience" data-en="Experience">Expérience</a></li>
+                <li><a href="#game" data-fr="Jeu" data-en="Games">Jeu</a></li>
+                <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
             </ul>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+                <button class="lang-toggle" id="langToggle" title="Change language">EN</button>
+            </div>
             <div class="mobile-menu-toggle">
                 <span></span>
                 <span></span>
@@ -36,47 +41,47 @@
             <div class="hero-text">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Disponible pour de nouveaux projets
+                    <span data-i18n="availableBadge">Disponible pour de nouveaux projets</span>
                 </div>
                 <h1>
-                    Bonjour, je suis<br>
+                    <span data-i18n="heroGreeting">Bonjour, je suis</span><br>
                     <span class="gradient-text">Mouad El Kbabty</span>
                 </h1>
-                <p class="hero-subtitle">Ingénieur Informatique spécialisé en développement logiciel, sécurité des systèmes et architecture distribuée</p>
+                <p class="hero-subtitle" data-i18n="heroSubtitle">Ingénieur Informatique spécialisé en développement logiciel, sécurité des systèmes et architecture distribuée</p>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <div class="stat-number">3+</div>
-                        <div class="stat-label">Années d'expérience</div>
+                        <div class="stat-label" data-i18n="yearsExp">Années d'expérience</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
                         <div class="stat-number">23+</div>
-                        <div class="stat-label">Projets réalisés</div>
+                        <div class="stat-label" data-i18n="projectsCount">Projets réalisés</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
                         <div class="stat-number">2</div>
-                        <div class="stat-label">Domaines d'expertise</div>
+                        <div class="stat-label" data-i18n="expertiseDomains">Domaines d'expertise</div>
                     </div>
                 </div>
                 <div class="cta-buttons">
                     <a href="#projets" class="btn btn-primary">
-                        <span>Voir mes projets</span>
+                        <span data-i18n="viewProjects">Voir mes projets</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </a>
-                    <a href="#contact" class="btn btn-secondary">Me contacter</a>
+                    <a href="#contact" class="btn btn-secondary" data-i18n="contactMe">Me contacter</a>
                 </div>
             </div>
-            <div class="hero-image">
+            <div class="hero-image" data-scroll data-parallax="0.3">
                 <div class="hero-card">
-                    <h3 class="card-title">Expertise & Compétences</h3>
+                    <h3 class="card-title" data-i18n="expertsCard">Expertise & Compétences</h3>
                     <div class="skill-categories">
                         <div class="skill-category">
                             <div class="category-icon">💻</div>
                             <div class="category-content">
-                                <h4>Langages de Programmation</h4>
+                                <h4 data-i18n="programmingLangs">Langages de Programmation</h4>
                                 <div class="skill-bars">
                                     <div class="skill-bar-item">
                                         <div class="skill-name">Java</div>
@@ -120,7 +125,7 @@
                         <div class="skill-category">
                             <div class="category-icon">🌐</div>
                             <div class="category-content">
-                                <h4>Frameworks & Web Services</h4>
+                                <h4 data-i18n="frameworks">Frameworks & Web Services</h4>
                                 <div class="skill-bars">
                                     <div class="skill-bar-item">
                                         <div class="skill-name">Spring Boot</div>
@@ -170,7 +175,7 @@
                         <div class="skill-category">
                             <div class="category-icon">🗄️</div>
                             <div class="category-content">
-                                <h4>Données & Outils</h4>
+                                <h4 data-i18n="databases">Données & Outils</h4>
                                 <div class="skill-bars">
                                     <div class="skill-bar-item">
                                         <div class="skill-name">PostgreSQL</div>
@@ -205,27 +210,27 @@
         </div>
     </section>
 
-    <section id="projets">
+    <section id="projets" data-scroll>
         <div class="container">
-            <h2 class="section-title">Mes <span class="gradient-text">Projets</span></h2>
-            <p class="section-subtitle">Découvrez mes réalisations dans différents domaines</p>
+            <h2 class="section-title" data-i18n="projectsTitle">Mes <span class="gradient-text">Projets</span></h2>
+            <p class="section-subtitle" data-i18n="projectsDesc">Découvrez mes réalisations dans différents domaines</p>
             
             <div class="project-filters">
                 <button class="filter-btn active" data-filter="all">
                     <span class="filter-icon">📊</span>
-                    Tous les projets
+                    <span data-i18n="allProjects">Tous les projets</span>
                 </button>
                 <button class="filter-btn" data-filter="web-hardware">
                     <span class="filter-icon">🖥️</span>
-                    Développement Web & Hardware (plus de projet sur mon GIT)
+                    <span data-i18n="webHardware">Développement Web & Hardware (plus de projet sur mon GIT)</span>
                 </button>
                 <button class="filter-btn" data-filter="data-science">
                     <span class="filter-icon">📈</span>
-                    Data Science (plus de projet sur mon GIT)
+                    <span data-i18n="dataScience">Data Science (plus de projet sur mon GIT)</span>
                 </button>
                 <button class="filter-btn" data-filter="machine-learning">
                     <span class="filter-icon">🤖</span>
-                    Machine Learning
+                    <span data-i18n="machineLearning">Machine Learning</span>
                 </button>
             </div>
 
@@ -234,27 +239,27 @@
 
             <div class="no-projects" id="noProjects" style="display: none;">
                 <div class="no-projects-icon">🔍</div>
-                <p>Aucun projet trouvé dans cette catégorie</p>
+                <p data-i18n="noProjects">Aucun projet trouvé dans cette catégorie</p>
             </div>
         </div>
     </section>
 
-    <section id="experience">
+    <section id="experience" data-scroll>
         <div class="container">
-            <h2 class="section-title">Parcours <span class="gradient-text">Professionnel</span></h2>
-            <p class="section-subtitle">Mon évolution professionnelle</p>
+            <h2 class="section-title" data-i18n="experienceTitle">Parcours <span class="gradient-text">Professionnel</span></h2>
+            <p class="section-subtitle" data-i18n="experienceDesc">Mon évolution professionnelle</p>
             
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-header">
                             <div class="timeline-date">
-                                <span class="date-badge">2025 - Présent</span>
+                                <span class="date-badge" data-i18n="presentDate">2025 - Présent</span>
                             </div>
-                            <div class="timeline-type">CDI</div>
+                            <div class="timeline-type" data-i18n="cdi">CDI</div>
                         </div>
-                        <h3 class="timeline-title">Software Engineer - R&D Engineer</h3>
-                        <p class="timeline-company">
+                        <h3 class="timeline-title" data-i18n="softwareEngineerRD">Software Engineer - R&D Engineer</h3>
+                        <p class="timeline-company" data-i18n="onnetSecuritySystem">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M8 8C9.65685 8 11 6.65685 11 5C11 3.34315 9.65685 2 8 2C6.34315 2 5 3.34315 5 5C5 6.65685 6.34315 8 8 8Z" stroke="currentColor" stroke-width="1.5"/>
                                 <path d="M2 14C2 11.7909 3.79086 10 6 10H10C12.2091 10 14 11.7909 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -283,11 +288,11 @@
                     <div class="timeline-content">
                         <div class="timeline-header">
                             <div class="timeline-date">
-                                <span class="date-badge">2023 - 2025</span>
+                                <span class="date-badge" data-i18n="experienceDate2">2023 - 2025</span>
                             </div>
-                            <div class="timeline-type">CDI</div>
+                            <div class="timeline-type" data-i18n="internship">internship</div>
                         </div>
-                        <h3 class="timeline-title">Software Engineer</h3>
+                        <h3 class="timeline-title" data-i18n="softwareEngineer">Software Engineer</h3>
                         <p class="timeline-company">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M8 8C9.65685 8 11 6.65685 11 5C11 3.34315 9.65685 2 8 2C6.34315 2 5 3.34315 5 5C5 6.65685 6.34315 8 8 8Z" stroke="currentColor" stroke-width="1.5"/>
@@ -302,7 +307,7 @@
                             <li>Implémentation d'un Web Service en C# pour l'import/export des utilisateurs</li>
                         </ul>
                         <div class="timeline-tech">
-                            <span class="tech-badge">Spring Security</span>
+                            <span class="tech-badge"> Java - Spring MVC - Spring Security - REST API - SOAP API</span>
                             <span class="tech-badge">LDAP</span>
                             <span class="tech-badge">SAML</span>
                             <span class="tech-badge">C#</span>
@@ -316,12 +321,12 @@
                     <div class="timeline-content">
                         <div class="timeline-header">
                             <div class="timeline-date">
-                                <span class="date-badge">Mai - Sept 2023</span>
+                                <span class="date-badge" data-i18n="experienceDate3">Mai - Sept 2023</span>
                             </div>
-                            <div class="timeline-type timeline-type-internship">Stage</div>
+                            <div class="timeline-type timeline-type-internship" data-i18n="internship">Stage</div>
                         </div>
-                        <h3 class="timeline-title">Software Engineer - Stagiaire</h3>
-                        <p class="timeline-company">
+                        <h3 class="timeline-title" data-i18n="softwareEngineerIntern">Software Engineer - Stagiaire</h3>
+                        <p class="timeline-company" data-i18n="telem">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M8 8C9.65685 8 11 6.65685 11 5C11 3.34315 9.65685 2 8 2C6.34315 2 5 3.34315 5 5C5 6.65685 6.34315 8 8 8Z" stroke="currentColor" stroke-width="1.5"/>
                                 <path d="M2 14C2 11.7909 3.79086 10 6 10H10C12.2091 10 14 11.7909 14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -348,46 +353,54 @@
         </div>
     </section>
 
-    <section id="game">
+    <section id="game" data-scroll>
         <div class="container">
-            <h2 class="section-title">Portfolio <span class="gradient-text">Interactif</span></h2>
-            <p class="section-subtitle">Explore mon portfolio en mode jeu - Utilise les flèches ou ZQSD pour te déplacer</p>
+            <h2 class="section-title">Portfolio <span class="gradient-text" data-i18n="gamePortfolio">Interactif</span></h2>
+            <p class="section-subtitle" data-i18n="gameInstructions">Explore mon portfolio en mode jeu - Utilise les flèches ou ZQSD pour te déplacer</p>
             
             <div class="game-container">
                 <canvas id="gameCanvas"></canvas>
                 <div class="game-info">
-                    <p>💡 Approche-toi des éléments pour interagir avec eux!</p>
+                    <p data-i18n="gameHint2">💡 Approche-toi des éléments pour interagir avec eux!</p>
                     <div class="game-legend">
-                        <div class="legend-item">💻 Ordinateur = Projets</div>
-                        <div class="legend-item">📚 Bibliothèque = Compétences</div>
-                        <div class="legend-item">☎️ Téléphone = Contact</div>
+                        <div class="legend-item"><span data-i18n="gameComputerLegend">💻 Ordinateur = Projets</span></div>
+                        <div class="legend-item"><span data-i18n="gameLibraryLegend">📚 Bibliothèque = Compétences</span></div>
+                        <div class="legend-item"><span data-i18n="gamePhoneLegend">☎️ Téléphone = Contact</span></div>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="games.html" class="btn btn-primary">
+                            <span data-i18n="moreGames">🎮 Plus de Jeux</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" data-scroll>
         <div class="container">
             <div class="contact-content">
-                <h2 class="section-title">Travaillons <span class="gradient-text">Ensemble</span></h2>
-                <p class="section-subtitle">Je suis toujours ouvert à de nouvelles opportunités et collaborations</p>
+                <h2 class="section-title">Travaillons <span class="gradient-text" data-i18n="contactTogether">Ensemble</span></h2>
+                <p class="section-subtitle" data-i18n="contactSubtitle">Je suis toujours ouvert à de nouvelles opportunités et collaborations</p>
                 
                 <div class="contact-grid">
                     <a href="mailto:mouad.elkbabty@example.com" class="contact-card">
                         <div class="contact-icon">📧</div>
-                        <h3>Email</h3>
+                        <h3 data-i18n="emailLabel">Email</h3>
                         <p>mouadelkbabty@gmail.com</p>
                     </a>
                     <a href="https://www.linkedin.com/in/mouadelkbabty" class="contact-card" target="_blank">
                         <div class="contact-icon">💼</div>
-                        <h3>LinkedIn</h3>
-                        <p>Connectons-nous</p>
+                        <h3 data-i18n="linkedinLabel">LinkedIn</h3>
+                        <p data-i18n="linkedinConnect">Connectons-nous</p>
                     </a>
                     <a href="https://github.com/mouadelkbabty" class="contact-card" target="_blank">
                         <div class="contact-icon">💻</div>
-                        <h3>GitHub</h3>
-                        <p>Voir mes projets</p>
+                        <h3 data-i18n="githubLabel">GitHub</h3>
+                        <p data-i18n="viewProjectsGit">Voir mes projets</p>
                     </a>
                 </div>
             </div>
@@ -399,10 +412,10 @@
             <div class="footer-content">
                 <div class="footer-left">
                     <div class="logo">MEK.</div>
-                    <p>Ingénieur Informatique passionné par l'innovation</p>
+                    <p data-i18n="footerTagline">Ingénieur Informatique passionné par l'innovation</p>
                 </div>
                 <div class="footer-right">
-                    <p>&copy; 2025 Mouad El Kbabty. Tous droits réservés.</p>
+                    <p data-i18n="footerCopyright">&copy; 2025 Mouad El Kbabty. Tous droits réservés.</p>
                 </div>
             </div>
         </div>

@@ -74,7 +74,7 @@ const projects = [
     },
     {
         id: 10,
-        title: "Modèle de Classification des Menaces",
+        title: "Application d'analyse intelligente de documents PDF",
         category: "machine-learning",
         categoryLabel: "Machine Learning",
         icon: "🎯",
