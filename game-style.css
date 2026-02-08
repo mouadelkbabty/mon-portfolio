@@ -1,0 +1,278 @@
+/* ===== GAME WORLD STYLE ===== */
+
+/* Game HUD overlay styles */
+.game-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.hud-top-left {
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.hud-top-right {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.hud-bottom-left {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.hud-bottom-right {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.hud-panel {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 45, 149, 0.1));
+    border: 2px solid rgba(0, 240, 255, 0.4);
+    border-radius: 12px;
+    padding: 1rem;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 240, 255, 0.05);
+    color: var(--text-primary);
+    font-family: 'DM Sans', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hud-label {
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+
+.hud-value {
+    font-size: 1.2rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+.health-bar {
+    width: 150px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.health-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    width: 100%;
+    box-shadow: 0 0 8px var(--neon-cyan);
+    transition: width 0.2s ease;
+}
+
+.hotspot-marker {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.2), transparent);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 15px rgba(0, 240, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    animation: pulse-glow 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.hotspot-marker::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--neon-pink);
+    border-radius: 50%;
+    animation: rotate-marker 3s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 15px rgba(0, 240, 255, 0.2);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.8), inset 0 0 20px rgba(0, 240, 255, 0.3);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes rotate-marker {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.minimap {
+    width: 150px;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+.minimap-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 240, 255, 0.1) 25%, rgba(0, 240, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 240, 255, 0.1) 75%, rgba(0, 240, 255, 0.1) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 240, 255, 0.1) 25%, rgba(0, 240, 255, 0.1) 26%, transparent 27%, transparent 74%, rgba(0, 240, 255, 0.1) 75%, rgba(0, 240, 255, 0.1) 76%, transparent 77%, transparent);
+    background-size: 30px 30px;
+    pointer-events: none;
+}
+
+.minimap-player {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.minimap-hotspot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--neon-pink);
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.97; }
+    50% { opacity: 1; }
+    100% { opacity: 0.97; }
+}
+
+.game-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 45, 149, 0.15));
+    border: 2px solid var(--neon-cyan);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    z-index: 100;
+    color: var(--neon-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: slideDown 0.4s ease-out;
+    pointer-events: auto;
+    backdrop-filter: blur(20px);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -100px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Player avatar styling (in canvas context) */
+.player-avatar {
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8));
+}
+
+/* Responsive game UI */
+@media (max-width: 768px) {
+    .hud-panel {
+        font-size: 0.85rem;
+        padding: 0.75rem;
+    }
+
+    .hud-value {
+        font-size: 1rem;
+    }
+
+    .minimap {
+        width: 120px;
+        height: 120px;
+    }
+
+    .hotspot-marker {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hud-top-left, .hud-top-right {
+        top: 80px;
+    }
+
+    .hud-panel {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 45, 149, 0.12));
+    }
+
+    .minimap {
+        width: 100px;
+        height: 100px;
+    }
+
+    .hotspot-marker {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+}
