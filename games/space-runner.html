@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Space Runner 3D | Portfolio</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Courier New', sans-serif; }
+        
+        #ui-layer {
+            position: absolute; top: 20px; left: 20px;
+            color: #00F0FF; text-transform: uppercase;
+            pointer-events: none; z-index: 10;
+        }
+        h1 { margin: 0; font-size: 20px; text-shadow: 0 0 10px #00F0FF; }
+        #score { font-size: 40px; font-weight: bold; }
+        
+        #instructions {
+            position: absolute; bottom: 30px; width: 100%; text-align: center;
+            color: rgba(255,255,255,0.5); font-size: 14px; pointer-events: none;
+        }
+
+        #game-over {
+            display: none; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); text-align: center;
+            background: rgba(10, 14, 39, 0.95); padding: 3rem;
+            border: 2px solid #FF2E63; border-radius: 20px;
+            color: white; box-shadow: 0 0 50px rgba(255, 46, 99, 0.3);
+            z-index: 20;
+        }
+        
+        button {
+            background: #00F0FF; border: none; padding: 15px 30px;
+            color: #0A0E27; font-weight: bold; font-size: 16px;
+            cursor: pointer; margin-top: 20px; border-radius: 50px;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.05); box-shadow: 0 0 20px #00F0FF; }
+        
+        .back-link {
+            display: block; margin-top: 20px; color: #8892A6; 
+            text-decoration: none; font-size: 12px;
+        }
+        .back-link:hover { color: white; }
+    </style>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>🚀 Space Runner 3D</h1>
+        <div id="score">0</div>
+    </div>
+    
+    <div id="instructions">
+        SOURIS GAUCHE / DROITE pour piloter
+    </div>
+
+    <div id="game-over">
+        <h2 style="color: #FF2E63; margin-top:0;">CRASH SYSTEM !</h2>
+        <p>Score Final: <span id="final-score">0</span></p>
+        <button onclick="location.reload()">Réessayer</button>
+        <a href="../games.html" class="back-link">Quitter vers le menu</a>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0A0E27, 0.035); // Brouillard effet profondeur
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 6);
+        camera.rotation.x = -0.1;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        // --- LUMIÈRES ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        // --- LE JOUEUR (Forme géométrique temporaire avant ton modèle Maya) ---
+        const playerGroup = new THREE.Group();
+        scene.add(playerGroup);
+
+        // Corps du vaisseau
+        const shipGeo = new THREE.ConeGeometry(0.5, 2, 8);
+        shipGeo.rotateX(Math.PI / 2);
+        const shipMat = new THREE.MeshStandardMaterial({ 
+            color: 0x00F0FF, roughness: 0.3, metalness: 0.8, emissive: 0x001133
+        });
+        const ship = new THREE.Mesh(shipGeo, shipMat);
+        playerGroup.add(ship);
+
+        // Réacteur (Lumière)
+        const engineLight = new THREE.PointLight(0x00F0FF, 2, 10);
+        engineLight.position.set(0, 0, 1);
+        playerGroup.add(engineLight);
+
+        playerGroup.position.y = 1;
+
+        // --- LE DÉCOR (Grid Retro Wave) ---
+        const gridHelper = new THREE.GridHelper(100, 40, 0xFF2E63, 0x1E2342);
+        gridHelper.position.y = 0;
+        scene.add(gridHelper);
+
+        // --- PARTICULES (Étoiles qui filent) ---
+        const starsGeo = new THREE.BufferGeometry();
+        const starsCount = 800;
+        const posArray = new Float32Array(starsCount * 3);
+        for(let i=0; i<starsCount*3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 80; // X Y Z aléatoires
+        }
+        starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const starsMat = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff });
+        const stars = new THREE.Points(starsGeo, starsMat);
+        scene.add(stars);
+
+        // --- OBSTACLES ---
+        let obstacles = [];
+        let frameCount = 0;
+        let gameActive = true;
+        let speed = 0.4;
+        let score = 0;
+
+        function createObstacle() {
+            // Cube Rouge Néon
+            const geometry = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+            const material = new THREE.MeshStandardMaterial({ color: 0xFF2E63 });
+            const cube = new THREE.Mesh(geometry, material);
+            
+            // Wireframe pour le style "Tech"
+            const edges = new THREE.EdgesGeometry(geometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+            cube.add(line);
+
+            cube.position.z = -50; // Apparait loin
+            cube.position.x = (Math.random() - 0.5) * 12; // Gauche ou droite aléatoire
+            cube.position.y = 0.6; 
+            
+            scene.add(cube);
+            obstacles.push(cube);
+        }
+
+        // --- CONTRÔLES (Souris) ---
+        let targetX = 0;
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 2 - 1; // De -1 à 1
+            targetX = x * 6; // Amplitude
+        });
+
+        // --- BOUCLE DE JEU ---
+        function animate() {
+            if(!gameActive) return;
+            requestAnimationFrame(animate);
+
+            // 1. Mouvement du joueur (Lissage)
+            playerGroup.position.x += (targetX - playerGroup.position.x) * 0.1;
+            playerGroup.rotation.z = -(playerGroup.position.x - targetX) * 0.3; // Inclinaison
+
+            // 2. Mouvement du décor (Illusion de vitesse)
+            gridHelper.position.z += speed;
+            if(gridHelper.position.z > 2.5) gridHelper.position.z = 0;
+
+            stars.position.z += speed;
+            if(stars.position.z > 20) stars.position.z = -20;
+
+            // 3. Gestion Obstacles
+            frameCount++;
+            if(frameCount > 40) { // Crée un obstacle tous les X frames
+                createObstacle();
+                frameCount = 0;
+            }
+
+            for(let i = obstacles.length -1; i >= 0; i--) {
+                let ob = obstacles[i];
+                ob.position.z += speed;
+                ob.rotation.x += 0.02;
+                ob.rotation.y += 0.02;
+
+                // Collision simple (Distance)
+                if(ob.position.distanceTo(playerGroup.position) < 1.3) {
+                    gameOver();
+                }
+
+                // Nettoyage et Score
+                if(ob.position.z > 5) {
+                    scene.remove(ob);
+                    obstacles.splice(i, 1);
+                    score += 100;
+                    document.getElementById('score').innerText = score;
+                    speed += 0.0005; // Accélération légère
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function gameOver() {
+            gameActive = false;
+            document.getElementById('game-over').style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+        }
+
+        // --- RESIZE ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>

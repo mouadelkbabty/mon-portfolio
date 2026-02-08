@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeux Interactifs | Mouad El Kbabty</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #0A0E27;
@@ -63,8 +66,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(50px, 50px) scale(1.1); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(50px, 50px) scale(1.1);
+            }
         }
 
         nav {
@@ -299,6 +309,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bg-gradient"></div>
     <div class="scroll-progress"></div>
@@ -313,16 +324,33 @@
     <section>
         <div class="container">
             <h1 class="section-title">Jeux <span class="gradient-text">Interactifs</span></h1>
-            <p style="text-align: center; color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem;">
+            <p
+                style="text-align: center; color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem;">
                 Découvre des façons originales et ludiques d'explorer mon portfolio
             </p>
 
             <div class="games-grid">
+                 <div class="game-card">
+                    <span class="game-icon">🌟</span>
+                    <h3>Attrape les Étoiles !</h3>
+                    <p>Un mini-jeu relaxant où tu dois attraper un maximum d’étoiles avant la fin du temps !</p>
+                    <div class="game-features">
+                        <div class="feature">Déplacement fluide</div>
+                        <div class="feature">Score et chronomètre</div>
+                        <div class="feature">Ambiance néon</div>
+                        <div class="feature">Fun et rapide</div>
+                    </div>
+                    <button class="game-btn" onclick="window.location.href='games/stars.html'">
+                        Jouer
+                    </button>
+                    <div class="game-status">💫 Prêt à jouer</div>
+                </div>
                 <!-- Game 1: Bureau Point & Click -->
                 <div class="game-card">
                     <span class="game-icon">🖥️</span>
                     <h3>Bureau Interactif</h3>
-                    <p>Explore mon espace de travail en point & click. Clique sur les objets pour découvrir mes projets, compétences et bien plus.</p>
+                    <p>Explore mon espace de travail en point & click. Clique sur les objets pour découvrir mes projets,
+                        compétences et bien plus.</p>
                     <div class="game-features">
                         <div class="feature">Vue isométrique détaillée</div>
                         <div class="feature">8+ objets interactifs</div>
@@ -339,7 +367,8 @@
                 <div class="game-card">
                     <span class="game-icon">🏃</span>
                     <h3>Plateforme - Side Scroller</h3>
-                    <p>Un jeu de plateforme dynamique où tu collectes des compétences technologiques et franchis des obstacles. Style Mario Bros.</p>
+                    <p>Un jeu de plateforme dynamique où tu collectes des compétences technologiques et franchis des
+                        obstacles. Style Mario Bros.</p>
                     <div class="game-features">
                         <div class="feature">3 niveaux progressifs</div>
                         <div class="feature">Double jump mécanique</div>
@@ -351,8 +380,26 @@
                     </button>
                     <div class="game-status">💬 Prêt à jouer</div>
                 </div>
+                <div class="game-card">
+                    <span class="game-icon">👾</span>
+                    <h3>Dev Simulator</h3>
+                    <p>Gère ta vie de développeur ! Code, bois du café et fixe des bugs dans ce mini-jeu de gestion
+                        addictif.</p>
+                    <div class="game-features">
+                        <div class="feature">Gestion de ressources</div>
+                        <div class="feature">Graphismes mignons</div>
+                        <div class="feature">Évite le Burnout</div>
+                        <div class="feature">Ship ton projet à 100%</div>
+                    </div>
+                    <button class="game-btn" onclick="window.location.href='games/dev-simulator.html'">
+                        Jouer
+                    </button>
+                    <div class="game-status">✨ Nouveau</div>
+                </div>
+               
             </div>
         </div>
+
     </section>
 
     <footer>
@@ -386,4 +433,5 @@
         });
     </script>
 </body>
+
 </html>

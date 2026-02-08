@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Life Simulator | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0E27;
+            --card: #151A33;
+            --accent: #00F0FF;
+            --danger: #FF2E63;
+            --warning: #FFD700;
+            --success: #00E676;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        
+        body {
+            background: var(--bg);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: var(--card);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.1);
+            position: relative;
+        }
+
+        h1 { font-family: 'Press Start 2P', cursive; color: var(--accent); margin-bottom: 2rem; font-size: 1.2rem; line-height: 1.5; }
+
+        /* Avatar Section */
+        .avatar-container {
+            position: relative;
+            height: 120px;
+            margin-bottom: 2rem;
+        }
+        .avatar {
+            font-size: 5rem;
+            animation: bounce 2s infinite ease-in-out;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .avatar:active { transform: scale(0.9); }
+        .status-bubble {
+            position: absolute;
+            top: 0; right: 20px;
+            background: white;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Stats Bars */
+        .stats { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .stat-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .label { width: 80px; text-align: left; font-weight: bold; }
+        .bar-container { flex: 1; height: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 50%; transition: width 0.3s, background 0.3s; }
+        
+        #coffee-bar { background: var(--warning); }
+        #bugs-bar { background: var(--danger); }
+        #project-bar { background: var(--accent); }
+
+        /* Actions */
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn {
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        .btn-code { background: rgba(0, 240, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); grid-column: span 2; }
+        .btn-coffee { background: rgba(255, 215, 0, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+        .btn-debug { background: rgba(255, 46, 99, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            font-weight: bold;
+            animation: floatUp 1s forwards;
+        }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; } }
+
+        /* Modal */
+        .modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; border-radius: 22px;
+        }
+        .back-link {
+            margin-top: 2rem; color: #8892A6; text-decoration: none; font-size: 0.9rem;
+        }
+        .back-link:hover { color: white; }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>DEV SIMULATOR v1.0</h1>
+
+        <div class="avatar-container">
+            <div class="status-bubble" id="message">Need Coffee!</div>
+            <div class="avatar" id="avatar" onclick="pokeAvatar()">👨‍💻</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-row">
+                <span class="label">PROJET</span>
+                <div class="bar-container"><div class="bar-fill" id="project-bar" style="width: 0%"></div></div>
+                <span id="project-text">0%</span>
+            </div>
+            <div class="stat-row">
+                <span class="label">ÉNERGIE</span>
+                <div class="bar-container"><div class="bar-fill" id="coffee-bar" style="width: 100%"></div></div>
+            </div>
+            <div class="stat-row">
+                <span class="label">BUGS</span>
+                <div class="bar-container"><div class="bar-fill" id="bugs-bar" style="width: 0%"></div></div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-coffee" onclick="drinkCoffee()">
+                <span>☕ Boire Café</span>
+                <span style="font-size: 0.7rem">+30% Énergie</span>
+            </button>
+            <button class="btn btn-debug" onclick="fixBugs()">
+                <span>🐛 Debugger</span>
+                <span style="font-size: 0.7rem">-20% Bugs</span>
+            </button>
+            <button class="btn btn-code" id="btn-code" onclick="writeCode()">
+                <span>💻 Coder une Feature</span>
+                <span style="font-size: 0.7rem">+5% Projet | -10% Énergie | +Risk Bugs</span>
+            </button>
+        </div>
+
+        <a href="../index.html" class="back-link">← Retour au Portfolio</a>
+
+        <div class="modal" id="end-screen">
+            <h2 id="end-title" style="font-size: 2rem; margin-bottom: 1rem;"></h2>
+            <p id="end-desc" style="margin-bottom: 2rem; color: #8892A6; padding: 0 1rem;"></p>
+            <button class="btn btn-code" onclick="resetGame()" style="width: auto; padding: 1rem 3rem;">Recommencer</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let state = {
+            project: 0,
+            energy: 100,
+            bugs: 0,
+            gameActive: true
+        };
+
+        const avatar = document.getElementById('avatar');
+        const msgBubble = document.getElementById('message');
+
+        function updateUI() {
+            document.getElementById('project-bar').style.width = state.project + '%';
+            document.getElementById('project-text').innerText = Math.floor(state.project) + '%';
+            
+            document.getElementById('coffee-bar').style.width = state.energy + '%';
+            document.getElementById('coffee-bar').style.backgroundColor = state.energy < 20 ? '#FF2E63' : '#FFD700';
+            
+            document.getElementById('bugs-bar').style.width = state.bugs + '%';
+
+            // Avatar mood
+            if (state.bugs > 50) avatar.innerText = '🤯';
+            else if (state.energy < 20) avatar.innerText = '😴';
+            else if (state.project > 80) avatar.innerText = '😎';
+            else avatar.innerText = '👨‍💻';
+
+            checkGameOver();
+        }
+
+        function spawnParticle(x, y, text, color) {
+            const p = document.createElement('div');
+            p.innerText = text;
+            p.className = 'particle';
+            p.style.color = color;
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 1000);
+        }
+
+        function showMessage(text) {
+            msgBubble.innerText = text;
+            msgBubble.style.opacity = 1;
+            setTimeout(() => msgBubble.style.opacity = 0, 1500);
+        }
+
+        function drinkCoffee() {
+            if (!state.gameActive) return;
+            state.energy = Math.min(state.energy + 30, 100);
+            showMessage("C'est fort ! ☕");
+            spawnParticle(window.innerWidth/2 - 50, window.innerHeight/2, "+Energy", "#FFD700");
+            updateUI();
+        }
+
+        function fixBugs() {
+            if (!state.gameActive) return;
+            if (state.bugs <= 0) {
+                showMessage("Code propre ! ✨");
+                return;
+            }
+            state.bugs = Math.max(state.bugs - 20, 0);
+            state.energy = Math.max(state.energy - 5, 0);
+            showMessage("Bugs fixés ! 🔧");
+            spawnParticle(window.innerWidth/2 + 50, window.innerHeight/2, "-Bugs", "#00E676");
+            updateUI();
+        }
+
+        function writeCode() {
+            if (!state.gameActive) return;
+            
+            // Random events
+            let progress = 5;
+            let bugRisk = Math.random();
+            
+            if (state.energy < 10) {
+                showMessage("Trop fatigué... 💤");
+                return;
+            }
+
+            // Crit
+            if (Math.random() > 0.8) {
+                progress = 10;
+                spawnParticle(window.innerWidth/2, window.innerHeight/2 - 50, "CRITICAL HIT! 🔥", "#00F0FF");
+            }
+
+            state.project += progress;
+            state.energy -= 10;
+            
+            // Bug generation logic
+            if (bugRisk > 0.6) state.bugs += 10;
+            if (state.energy < 30 && bugRisk > 0.3) state.bugs += 15; // More bugs when tired
+
+            updateUI();
+        }
+
+        function checkGameOver() {
+            const modal = document.getElementById('end-screen');
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+
+            if (state.project >= 100) {
+                endGame("PROJET TERMINÉ ! 🚀", "Bravo, le client est ravi. Tu peux maintenant mettre ça sur ton portfolio.", "#00E676");
+            } else if (state.energy <= 0) {
+                endGame("BURNOUT... 💀", "Tu as oublié de boire du café. Le projet est en retard.", "#FF2E63");
+            } else if (state.bugs >= 100) {
+                endGame("DETTE TECHNIQUE 📉", "Il y a trop de bugs, le code est impossible à maintenir. Refonte nécessaire.", "#FF2E63");
+            }
+        }
+
+        function endGame(tit, txt, col) {
+            state.gameActive = false;
+            const modal = document.getElementById('end-screen');
+            document.getElementById('end-title').innerText = tit;
+            document.getElementById('end-title').style.color = col;
+            document.getElementById('end-desc').innerText = txt;
+            modal.style.display = 'flex';
+        }
+
+        function resetGame() {
+            state = { project: 0, energy: 100, bugs: 0, gameActive: true };
+            document.getElementById('end-screen').style.display = 'none';
+            updateUI();
+        }
+
+        function pokeAvatar() {
+            if(state.gameActive) showMessage("Arrête, je code !");
+        }
+
+        // Loop passive drain
+        setInterval(() => {
+            if (state.gameActive && state.project < 100) {
+                state.energy = Math.max(state.energy - 1, 0);
+                updateUI();
+            }
+        }, 1000);
+
+        updateUI();
+    </script>
+</body>
+</html>
