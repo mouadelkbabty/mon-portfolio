@@ -21,7 +21,7 @@ const translations = {
         frameworks: 'Frameworks & Web Services',
         databases: 'Données & Outils',
         // Projects Section
-        projectsTitle: 'Mes Projets',
+        projectsTitle: 'Projets',
         projectsDesc: 'Découvrez mes réalisations dans différents domaines',
         allProjects: 'Tous les projets',
         webHardware: 'Développement Web & Hardware (plus de projet sur mon GIT)',
@@ -29,7 +29,7 @@ const translations = {
         machineLearning: 'Machine Learning',
         noProjects: 'Aucun projet trouvé dans cette catégorie',
         // Experience Section
-        experienceTitle: 'Parcours Professionnel',
+        experienceTitle: 'Professionnel',
         experienceDesc: 'Mon évolution professionnelle',
         presentDate: '2025 - Présent',
         softwareEngineerRD: 'Software Engineer - R&D Engineer',
@@ -83,7 +83,7 @@ const translations = {
         frameworks: 'Frameworks & Web Services',
         databases: 'Data & Tools',
         // Projects Section
-        projectsTitle: 'My Projects',
+        projectsTitle: 'Projects',
         projectsDesc: 'Discover my work across various domains',
         allProjects: 'All projects',
         webHardware: 'Web & Hardware Development (more projects on my GitHub)',
@@ -91,7 +91,7 @@ const translations = {
         machineLearning: 'Machine Learning',
         noProjects: 'No projects found in this category',
         // Experience Section
-        experienceTitle: 'Professional Experience',
+        experienceTitle: 'Experience',
         experienceDesc: 'My professional journey',
         presentDate: '2025 - Present',
         softwareEngineerRD: 'Software Engineer - R&D Engineer',

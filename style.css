@@ -233,8 +233,9 @@ nav .container {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10rem 5% 4rem;
+    padding: 10rem 5% 15rem;
     position: relative;
+    margin-bottom: 5rem;
 }
 
 .hero-content {
@@ -566,6 +567,10 @@ nav .container {
 section {
     padding: 6rem 5%;
     position: relative;
+}
+
+#projets {
+    padding-top: 10rem;
 }
 
 .container {
