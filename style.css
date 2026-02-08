@@ -70,23 +70,37 @@ body {
     50% { transform: translate(50px, 50px) scale(1.1); }
 }
 
+/* Scroll Progress Bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    z-index: 1001;
+    width: 0%;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 20px var(--glow);
+}
+
 /* Navigation */
 nav {
     position: fixed;
     top: 0;
     width: 100%;
     padding: 1.5rem 5%;
-    background: rgba(10, 14, 39, 0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(10, 14, 39, 0.7);
+    backdrop-filter: blur(30px);
     z-index: 1000;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
     transition: all 0.3s ease;
 }
 
 nav.scrolled {
     padding: 1rem 5%;
     background: rgba(10, 14, 39, 0.95);
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
 }
 
 nav .container {
@@ -323,12 +337,15 @@ nav .container {
 }
 
 .hero-card {
-    background: var(--surface);
-    border: 1px solid rgba(0, 240, 255, 0.2);
+    background: rgba(21, 26, 51, 0.5);
+    border: 1px solid rgba(0, 240, 255, 0.25);
     border-radius: 24px;
     padding: 2.5rem;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.1);
+    transition: all 0.4s ease;
 }
 
 .hero-card::before {
@@ -407,6 +424,75 @@ nav .container {
     background: rgba(0, 240, 255, 0.2);
     border-color: var(--accent);
     transform: translateY(-2px);
+}
+
+/* Skill Bars */
+.skill-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skill-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.skill-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skill-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 240, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    position: relative;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    border-radius: 10px;
+    width: 0%;
+    animation: fillBar 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    box-shadow: 0 0 15px var(--glow);
+}
+
+.skill-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes fillBar {
+    from {
+        width: 0%;
+    }
+    to {
+        width: var(--percentage);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 @keyframes slideUp {
@@ -499,7 +585,7 @@ section {
 }
 
 .project-card {
-    background: var(--surface);
+    background: rgba(21, 26, 51, 0.4);
     border: 1px solid rgba(0, 240, 255, 0.15);
     border-radius: 20px;
     overflow: hidden;
@@ -507,6 +593,9 @@ section {
     cursor: pointer;
     opacity: 0;
     animation: fadeInUp 0.6s ease forwards;
+    backdrop-filter: blur(10px);
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .project-card.hidden {
@@ -525,9 +614,10 @@ section {
 }
 
 .project-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-12px) scale(1.02);
     border-color: var(--accent);
-    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.25);
+    box-shadow: 0 30px 80px rgba(0, 240, 255, 0.35);
+    background: rgba(21, 26, 51, 0.7);
 }
 
 .project-image {
@@ -629,14 +719,7 @@ section {
 }
 
 .timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-warm) 100%);
-    transform: translateX(-50%);
+    display: none;
 }
 
 .timeline-item {
@@ -669,11 +752,13 @@ section {
 
 .timeline-content {
     flex: 1;
-    background: var(--surface);
+    background: rgba(21, 26, 51, 0.5);
     padding: 2.5rem;
     border-radius: 20px;
     border: 1px solid rgba(0, 240, 255, 0.2);
     transition: all 0.4s;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
 }
 
 .timeline-content:hover {
@@ -683,16 +768,7 @@ section {
 }
 
 .timeline-dot {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 24px;
-    background: var(--accent);
-    border-radius: 50%;
-    border: 5px solid var(--primary);
-    box-shadow: 0 0 25px var(--glow);
-    z-index: 10;
+    display: none;
 }
 
 .timeline-header {
@@ -809,6 +885,54 @@ section {
     font-size: 0.85rem;
     color: var(--accent-warm);
     font-weight: 500;
+}
+
+/* Game Section */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+#gameCanvas {
+    width: 100%;
+    max-width: 1000px;
+    height: 600px;
+    background: linear-gradient(135deg, var(--secondary), var(--surface-light));
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 240, 255, 0.2);
+    display: block;
+    cursor: move;
+}
+
+.game-info {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.game-info p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+
+.game-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+}
+
+.legend-item {
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 12px;
+    color: var(--text);
 }
 
 /* Contact Section */

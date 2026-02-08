@@ -1,3 +1,12 @@
+// Scroll Progress Bar
+const scrollProgress = document.querySelector('.scroll-progress');
+
+window.addEventListener('scroll', () => {
+    const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.pageYOffset / windowHeight) * 100;
+    scrollProgress.style.width = scrolled + '%';
+});
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -125,6 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroStats) {
         statsObserver.observe(heroStats);
     }
+    
+    // Trigger skill bars animation on page load
+    const skillBars = document.querySelectorAll('.skill-bar-fill');
+    skillBars.forEach(bar => {
+        bar.style.animation = 'fillBar 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+    });
 });
 
 // Cursor follow effect for hero section (optional advanced feature)
