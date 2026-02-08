@@ -1,7 +1,4 @@
-// ADVANCED 3D/CANVAS EFFECTS
-// ============================
 
-// 1. INTERACTIVE MOUSE-FOLLOWING BACKGROUND
 class MouseFollower {
     constructor() {
         this.canvas = document.createElement('canvas');
@@ -38,7 +35,6 @@ class MouseFollower {
         this.mouse.x = e.clientX;
         this.mouse.y = e.clientY;
         
-        // Crée des particules autour du curseur
         for (let i = 0; i < 2; i++) {
             this.particles.push(new Particle(
                 this.mouse.x + (Math.random() - 0.5) * 50,
@@ -49,11 +45,9 @@ class MouseFollower {
     }
     
     animate() {
-        // Efface avec trail effect
         this.ctx.fillStyle = 'rgba(15, 23, 42, 0.02)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Met à jour et dessine les particules
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
             p.update(this.mouse);
@@ -85,7 +79,6 @@ class Particle {
         this.y += this.vy;
         this.alpha -= this.decay;
         
-        // Attraction légère vers la souris
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
@@ -102,14 +95,12 @@ class Particle {
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
         
-        // Glow effect
         ctx.strokeStyle = `rgba(0, 240, 255, ${this.alpha * 0.3})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
     }
 }
 
-// 2. ANIMATED SCROLL PARTICLES
 class ScrollParticles {
     constructor() {
         this.canvas = document.createElement('canvas');
@@ -145,7 +136,6 @@ class ScrollParticles {
     }
     
     spawnParticles() {
-        // Crée des particules au scroll
         for (let i = 0; i < 1; i++) {
             this.particles.push(new ScrollParticle(
                 Math.random() * this.canvas.width,
@@ -155,11 +145,9 @@ class ScrollParticles {
     }
     
     animate() {
-        // Clear avec dégradé très léger
         this.ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Dessine les particules
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
             p.update(this.scrollY);
@@ -202,7 +190,6 @@ class ScrollParticle {
     }
 }
 
-// 3. GLITCH EFFECT ON HOVER
 class GlitchEffect {
     constructor() {
         this.setupGlitchStyle();
@@ -329,7 +316,6 @@ class GlitchEffect {
     }
     
     attachGlitchListeners() {
-        // Ajoute l'effet glitch aux titres des sections
         document.querySelectorAll('.section-title').forEach(title => {
             title.classList.add('glitch-text');
             
@@ -344,7 +330,6 @@ class GlitchEffect {
             });
         });
         
-        // Ajoute l'effet glitch aux boutons
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('mouseenter', () => {
                 btn.style.filter = 'brightness(1.3) saturate(1.5)';
@@ -359,12 +344,10 @@ class GlitchEffect {
     }
 }
 
-// Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
-    // Attendre que le DOM soit complètement chargé
     setTimeout(() => {
-        new MouseFollower();      // Fond qui suit la souris
-        new ScrollParticles();    // Particules au scroll
-        new GlitchEffect();       // Effet glitch au survol
+        new MouseFollower();      
+        new ScrollParticles();   
+        new GlitchEffect();       
     }, 100);
 });
