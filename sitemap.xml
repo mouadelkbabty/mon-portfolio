@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mouadelkbabty.com/</loc>
+    <loc>https://mouadelkbabty.vercel.app/</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://mouadelkbabty.com/games.html</loc>
+    <loc>https://mouadelkbabty.vercel.app/games.html</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://mouadelkbabty.com/chat.html</loc>
+    <loc>https://mouadelkbabty.vercel.app/chat.html</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://mouadelkbabty.com/games/platformer.html</loc>
+    <loc>https://mouadelkbabty.vercel.app/games/platformer.html</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://mouadelkbabty.com/games/platformer-new.html</loc>
+    <loc>https://mouadelkbabty.vercel.app/games/platformer-new.html</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://mouadelkbabty.com/games/bureau.html</loc>
+    <loc>https://mouadelkbabty.vercel.app/games/bureau.html</loc>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
