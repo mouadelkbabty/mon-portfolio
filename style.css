@@ -277,7 +277,10 @@ nav .container {
     line-height: 1.8;
     max-width: 600px;
 }
-
+html {
+    font-size: 80%; /* Réduit la taille de base à 80%. 1rem passe de 16px à 12.8px */
+    scroll-behavior: smooth;
+}
 .hero-stats {
     display: flex;
     align-items: center;
